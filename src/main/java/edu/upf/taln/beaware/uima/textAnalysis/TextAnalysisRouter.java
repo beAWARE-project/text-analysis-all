@@ -120,14 +120,10 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 			return; // skip unknown languages
 		}
 		if (isTwitter) {
-			this.cleaner.process(jcas);
 			try {
+				this.cleaner.process(jcas);
 				JCas cleanView = jcas.getView(TARGET_VIEW);
-				try {
-					this.pipes.get(lang).process(cleanView);
-				} catch (AnalysisEngineProcessException e) {
-					logger.warning(e.toString());
-				}
+				this.pipes.get(lang).process(cleanView);
 				BeAwareMetaData meta = JCasUtil.selectSingle(jcas, BeAwareMetaData.class);
 				BeAwareMetaData meta2 = (BeAwareMetaData) meta.clone();
 				meta2.setFeatureValue(meta2.getType().getFeatureByBaseName("sofa"), cleanView.getSofa());
@@ -135,7 +131,8 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 				//CasCopier cc = new CasCopier(jcas.getCas(), cleanView.getCas());
 				//cc.copyFs(meta);
 				this.kafkaWriter.process(cleanView);
-			} catch (CASException e) {
+			} catch (CASException|AnalysisEngineProcessException e) {
+				logger.warning(e.toString());
 				throw new AnalysisEngineProcessException(e);
 			}
 		} else { // not Twitter
