@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: text-analysis-all
+  name: text-analysis-all
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: text-analysis-all
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  revisionHistoryLimit: 5
+  template:
+    metadata:
+      labels:
+        app: text-analysis-all
+    spec:
+      containers:
+      - image: beaware/text-analysis-all:IMAGE_TAG
+        imagePullPolicy: Always
+        name: text-analysis-all
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 200m
+            memory: 10240Mi
+        env:
+          - name: SECRET_MH_API_KEY
+            valueFrom:
+             secretKeyRef:
+              name: mh-secret2
+              key: api_key
+          - name: SECRET_MH_BROKERS
+            valueFrom:
+             secretKeyRef:
+              name: mh-secret2
+              key: kafka_brokers_sasl
+          - name: SECRET_MONGO_URI
+            valueFrom:
+             secretKeyRef:
+              name: mongo-secret
+              key: uri
