@@ -6,7 +6,7 @@ node ('beaware-jenkins-slave') {
     }
 
     stage ('Compile (Maven)') {
-        sh 'mvn clean package'
+        sh 'mvn clean package -U'
     }
 
     stage ('Build docker image') {
