@@ -1,6 +1,7 @@
 package edu.upf.taln.beaware.uima.textAnalysis;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -22,6 +23,7 @@ import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.CasCopier;
 
 import com.google.gson.GsonBuilder;
+import com.jayway.jsonpath.JsonPath;
 
 import de.tudarmstadt.ukp.dkpro.core.arktools.ArktweetTokenizer;
 import de.tudarmstadt.ukp.dkpro.core.castransformation.ApplyChangesAnnotator;
@@ -78,8 +80,8 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 		try {
 			Map<String,BeawarePipeline>builders = new HashMap<>();
 			builders.put("en", new EnglishPipelineUd());
-			//builders.put("es", new SpanishPipelineUd());
-			//builders.put("el", new GreekPipeline());
+			builders.put("es", new SpanishPipelineUd());
+			builders.put("el", new GreekPipeline());
 			builders.put("it", new ItalianPipeline());
 
 			this.pipes = new HashMap<>();
@@ -108,10 +110,36 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 	@Override
 	public void process(JCas kafkaCas) throws AnalysisEngineProcessException {
 
-		// filter
-		boolean isTwitter = true;
+		String kafkaMessage = kafkaCas.getDocumentText();
+		String topic = "unknown"; 
+		try {
+			topic = ((List<String>)JsonPath.read(kafkaMessage, "$..topicName")).get(0);
+			logger.info("topic: "+topic);
+		} catch (Exception e) {
+			logger.warning("couldn't get topic");
+			logger.info(kafkaMessage);
+		}
+		// filters
+		// don't process actionType=update from APP
+		if (topic.equals("TOP021_INCIDENT_REPORT")) {
+			String filterApp = "$[?(@.body.description && @.header.actionType == 'Alert')]";
+			List<String> matches = JsonPath.read(kafkaMessage, filterApp);
+			if (matches.isEmpty()) {
+				logger.info("rejected by filter: " + kafkaMessage);
+				return;
+			}
+		}
+
+		// treat tweets differently
+		boolean isTwitter = false;
+		/* TODO: should check topic or sender, but since the twitter pipeline is having problems it's better to just use the normal one
+		if (topic == "TOP001_SOCIAL_MEDIA_TEXT") {
+			isTwitter = true;
+		};
+		 */
+
 		// build CAS for processing (like BeAwareKafkaIncidentReader)
-		JCas jcas = messageToCas(kafkaCas);
+		JCas jcas = messageToCas(kafkaMessage);
 
 		// process with appropriate pipeline
 		String lang = jcas.getDocumentLanguage();
@@ -128,8 +156,6 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 				BeAwareMetaData meta2 = (BeAwareMetaData) meta.clone();
 				meta2.setFeatureValue(meta2.getType().getFeatureByBaseName("sofa"), cleanView.getSofa());
 				meta2.addToIndexes(cleanView);
-				//CasCopier cc = new CasCopier(jcas.getCas(), cleanView.getCas());
-				//cc.copyFs(meta);
 				this.kafkaWriter.process(cleanView);
 			} catch (CASException|AnalysisEngineProcessException e) {
 				logger.warning(e.toString());
@@ -141,11 +167,11 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 		}
 	}
 
-	private JCas messageToCas(JCas kafkaCas) throws AnalysisEngineProcessException {
+	private JCas messageToCas(String kafkaMessage) throws AnalysisEngineProcessException {
 		try {
 			JCas jcas = JCasFactory.createJCas();
 			GsonBuilder builder = new GsonBuilder();
-			Map<String, Object> o = (Map<String, Object>) builder.create().fromJson(kafkaCas.getDocumentText(), Object.class);
+			Map<String, Object> o = (Map<String, Object>) builder.create().fromJson(kafkaMessage, Object.class);
 			Map<String, Object> body = (Map<String, Object>) o.get("body");
 			try {
 				jcas.setDocumentText((String) body.get("description"));
@@ -156,7 +182,7 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 				jcas.setDocumentText("");
 			}
 			BeAwareMetaData metadata = new BeAwareMetaData(jcas);
-			metadata.setKafkaMessage(kafkaCas.getDocumentText());
+			metadata.setKafkaMessage(kafkaMessage);
 			metadata.setDocumentId(body.get("incidentID").toString());
 			jcas.setDocumentLanguage(((String) body.get("language")).replaceAll("-.*", ""));
 			if (metadata.getView().getDocumentText() != null) {

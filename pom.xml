@@ -30,29 +30,53 @@
 			<version>2.10.2</version>
 		</dependency>
 		<dependency>
-			<groupId>com.mashape.unirest</groupId>
-			<artifactId>unirest-java</artifactId>
-			<version>1.4.9</version>
-		</dependency>
-		<dependency>
 			<groupId>edu.upf.taln.beaware.uima</groupId>
 			<artifactId>beaware-pipeline-en</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.upf.taln.beaware.uima</groupId>
 			<artifactId>beaware-pipeline-es</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.upf.taln.beaware.uima</groupId>
 			<artifactId>beaware-pipeline-el</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.upf.taln.beaware.uima</groupId>
 			<artifactId>beaware-pipeline-it</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.upf.taln.beaware.uima</groupId>
+			<artifactId>beaware-pipelines-commons</artifactId>
+			<version>0.0.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>
+				de.tudarmstadt.ukp.dkpro.core.arktools-gpl
+			</artifactId>
+			<version>1.9.1</version>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>
+				de.tudarmstadt.ukp.dkpro.core.castransformation-asl
+			</artifactId>
+			<version>1.9.1</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.upf.taln.uima.clean</groupId>
+			<artifactId>twitter_clean</artifactId>
+			<version>0.2</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
@@ -77,6 +101,16 @@
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-annotations</artifactId>
 				<version>2.9.0</version>
+			</dependency>
+			<dependency>
+				<groupId>xerces</groupId>
+				<artifactId>xercesImpl</artifactId>
+				<version>2.11.0</version>
+			</dependency>
+			<dependency>
+				<groupId>xml-apis</groupId>
+				<artifactId>xml-apis</artifactId>
+				<version>1.4.01</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
