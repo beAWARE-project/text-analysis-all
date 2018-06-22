@@ -132,11 +132,9 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 
 		// treat tweets differently
 		boolean isTwitter = false;
-		/* TODO: should check topic or sender, but since the twitter pipeline is having problems it's better to just use the normal one
 		if (topic == "TOP001_SOCIAL_MEDIA_TEXT") {
 			isTwitter = true;
 		};
-		 */
 
 		// build CAS for processing (like BeAwareKafkaIncidentReader)
 		JCas jcas = messageToCas(kafkaMessage);
