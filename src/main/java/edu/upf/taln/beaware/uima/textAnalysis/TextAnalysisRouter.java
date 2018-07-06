@@ -142,9 +142,11 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 
 			// treat tweets differently
 			boolean isTwitter = false;
+			/*
 			if ("TOP001_SOCIAL_MEDIA_TEXT".equals(topic)) {
 				isTwitter = true;
 			};
+			*/
 
 			// build CAS for processing (like BeAwareKafkaIncidentReader)
 			JCas jcas = messageToCas(kafkaMessage);
