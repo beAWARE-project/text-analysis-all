@@ -32,22 +32,22 @@
 		<dependency>
 			<groupId>edu.upf.taln.beaware.uima</groupId>
 			<artifactId>beaware-pipeline-en</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
+			<version>0.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.upf.taln.beaware.uima</groupId>
 			<artifactId>beaware-pipeline-es</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
+			<version>0.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.upf.taln.beaware.uima</groupId>
 			<artifactId>beaware-pipeline-el</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
+			<version>0.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.upf.taln.beaware.uima</groupId>
 			<artifactId>beaware-pipeline-it</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
+			<version>0.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -57,7 +57,7 @@
 		<dependency>
 			<groupId>edu.upf.taln.beaware.uima</groupId>
 			<artifactId>beaware-pipelines-commons</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
+			<version>0.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
@@ -111,6 +111,11 @@
 				<groupId>xml-apis</groupId>
 				<artifactId>xml-apis</artifactId>
 				<version>1.4.01</version>
+			</dependency>
+			<dependency>
+				<groupId>edu.upf.taln.buddy</groupId>
+				<artifactId>buddy-core</artifactId>
+				<version>0.1.0-pre</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
