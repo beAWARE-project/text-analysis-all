@@ -14,11 +14,13 @@
 	</properties>
 	<name>text-analysis-all</name>
 	<dependencies>
+		<!-- included through beAWARE-pipelines >
 		<dependency>
 			<groupId>edu.upf.taln.beaware.uima</groupId>
 			<artifactId>beAWARE-components</artifactId>
 			<version>0.9.0-SNAPSHOT</version>
 		</dependency>
+		<-->
 		<dependency>
 			<groupId>org.apache.uima</groupId>
 			<artifactId>uimafit-core</artifactId>
@@ -32,22 +34,22 @@
 		<dependency>
 			<groupId>edu.upf.taln.beaware.uima</groupId>
 			<artifactId>beaware-pipeline-en</artifactId>
-			<version>0.2.0</version>
+			<version>0.3.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.upf.taln.beaware.uima</groupId>
 			<artifactId>beaware-pipeline-es</artifactId>
-			<version>0.2.0</version>
+			<version>0.3.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.upf.taln.beaware.uima</groupId>
 			<artifactId>beaware-pipeline-el</artifactId>
-			<version>0.2.0</version>
+			<version>0.3.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.upf.taln.beaware.uima</groupId>
 			<artifactId>beaware-pipeline-it</artifactId>
-			<version>0.2.0</version>
+			<version>0.3.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -57,7 +59,7 @@
 		<dependency>
 			<groupId>edu.upf.taln.beaware.uima</groupId>
 			<artifactId>beaware-pipelines-commons</artifactId>
-			<version>0.2.0</version>
+			<version>0.3.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
