@@ -113,55 +113,71 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 		String kafkaMessage = kafkaCas.getDocumentText();
 		String topic = "unknown"; 
 		try {
-			topic = ((List<String>)JsonPath.read(kafkaMessage, "$..topicName")).get(0);
-			logger.info("topic: "+topic);
-		} catch (Exception e) {
-			logger.warning("couldn't get topic");
-			logger.info(kafkaMessage);
-		}
-		// filters
-		// don't process actionType=update from APP
-		if (topic.equals("TOP021_INCIDENT_REPORT")) {
-			String filterApp = "$[?(@.body.description && @.header.actionType == 'Alert')]";
-			List<String> matches = JsonPath.read(kafkaMessage, filterApp);
-			if (matches.isEmpty()) {
-				logger.info("rejected by filter: " + kafkaMessage);
+			logger.info("received message: " + kafkaMessage);
+
+			String filterBody = "$[?(@.body)]";
+			List<String> matchesBody = JsonPath.read(kafkaMessage, filterBody);
+			if (matchesBody.isEmpty()) {
+				logger.info("no body found, rejected: " + kafkaMessage);
 				return;
 			}
-		}
 
-		// treat tweets differently
-		boolean isTwitter = false;
-		if (topic == "TOP001_SOCIAL_MEDIA_TEXT") {
-			isTwitter = true;
-		};
-
-		// build CAS for processing (like BeAwareKafkaIncidentReader)
-		JCas jcas = messageToCas(kafkaMessage);
-
-		// process with appropriate pipeline
-		String lang = jcas.getDocumentLanguage();
-		if (!pipes.containsKey(lang)) {
-			logger.info("unknown language: "+lang);
-			return; // skip unknown languages
-		}
-		if (isTwitter) {
 			try {
-				this.cleaner.process(jcas);
-				JCas cleanView = jcas.getView(TARGET_VIEW);
-				this.pipes.get(lang).process(cleanView);
-				BeAwareMetaData meta = JCasUtil.selectSingle(jcas, BeAwareMetaData.class);
-				BeAwareMetaData meta2 = (BeAwareMetaData) meta.clone();
-				meta2.setFeatureValue(meta2.getType().getFeatureByBaseName("sofa"), cleanView.getSofa());
-				meta2.addToIndexes(cleanView);
-				this.kafkaWriter.process(cleanView);
-			} catch (CASException|AnalysisEngineProcessException e) {
-				logger.warning(e.toString());
-				throw new AnalysisEngineProcessException(e);
+				topic = ((List<String>)JsonPath.read(kafkaMessage, "$..topicName")).get(0);
+				logger.info("topic: "+topic);
+			} catch (Exception e) {
+				logger.warning("couldn't get topic");
+				logger.info(kafkaMessage);
 			}
-		} else { // not Twitter
-			this.pipes.get(lang).process(jcas);
-			this.kafkaWriter.process(jcas);
+			// filters
+			// don't process actionType=update from APP
+			if (topic.equals("TOP021_INCIDENT_REPORT")) {
+				String filterApp = "$[?(@.body.description && @.header.actionType == 'Alert')]";
+				List<String> matches = JsonPath.read(kafkaMessage, filterApp);
+				if (matches.isEmpty()) {
+					logger.info("rejected by filter: " + kafkaMessage);
+					return;
+				}
+			}
+
+			// treat tweets differently
+			boolean isTwitter = false;
+			/*
+			if ("TOP001_SOCIAL_MEDIA_TEXT".equals(topic)) {
+				isTwitter = true;
+			};
+			*/
+
+			// build CAS for processing (like BeAwareKafkaIncidentReader)
+			JCas jcas = messageToCas(kafkaMessage);
+
+			// process with appropriate pipeline
+			String lang = jcas.getDocumentLanguage();
+			if (!pipes.containsKey(lang)) {
+				logger.info("unknown language: "+lang);
+				return; // skip unknown languages
+			}
+			if (isTwitter) {
+				try {
+					this.cleaner.process(jcas);
+					JCas cleanView = jcas.getView(TARGET_VIEW);
+					this.pipes.get(lang).process(cleanView);
+					BeAwareMetaData meta = JCasUtil.selectSingle(jcas, BeAwareMetaData.class);
+					BeAwareMetaData meta2 = (BeAwareMetaData) meta.clone();
+					meta2.setFeatureValue(meta2.getType().getFeatureByBaseName("sofa"), cleanView.getSofa());
+					meta2.addToIndexes(cleanView);
+					this.kafkaWriter.process(cleanView);
+				} catch (CASException|AnalysisEngineProcessException e) {
+					logger.warning(e.toString());
+					throw new AnalysisEngineProcessException(e);
+				}
+			} else { // not Twitter
+				this.pipes.get(lang).process(jcas);
+				this.kafkaWriter.process(jcas);
+			}
+		} catch (Exception e) {
+			logger.severe("skipping message:" + kafkaMessage);
+			logger.severe(e.getStackTrace().toString());
 		}
 	}
 
