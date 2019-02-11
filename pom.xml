@@ -1,86 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>beaware</groupId>
 	<artifactId>text-analysis-all</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<packaging>jar</packaging>
+	
+	<name>text-analysis-all</name>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<jdk.version>1.8</jdk.version>
+		<mvn.compiler.version>3.5.1</mvn.compiler.version>
+		<dkpro.version>1.9.1</dkpro.version>
+		<dkpro.taln.version>1.9.1-taln</dkpro.taln.version>
+		<beaware.pipeline.version>0.3.0</beaware.pipeline.version>
 	</properties>
-	<name>text-analysis-all</name>
-	<dependencies>
-		<!-- included through beAWARE-pipelines >
-		<dependency>
-			<groupId>edu.upf.taln.beaware.uima</groupId>
-			<artifactId>beAWARE-components</artifactId>
-			<version>0.9.0-SNAPSHOT</version>
-		</dependency>
-		<-->
-		<dependency>
-			<groupId>org.apache.uima</groupId>
-			<artifactId>uimafit-core</artifactId>
-			<version>2.4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.uima</groupId>
-			<artifactId>uimaj-core</artifactId>
-			<version>2.10.2</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.upf.taln.beaware.uima</groupId>
-			<artifactId>beaware-pipeline-en</artifactId>
-			<version>0.3.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.upf.taln.beaware.uima</groupId>
-			<artifactId>beaware-pipeline-es</artifactId>
-			<version>0.3.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.upf.taln.beaware.uima</groupId>
-			<artifactId>beaware-pipeline-el</artifactId>
-			<version>0.3.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.upf.taln.beaware.uima</groupId>
-			<artifactId>beaware-pipeline-it</artifactId>
-			<version>0.3.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.8.0</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.upf.taln.beaware.uima</groupId>
-			<artifactId>beaware-pipelines-commons</artifactId>
-			<version>0.3.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
-			<artifactId>
-				de.tudarmstadt.ukp.dkpro.core.arktools-gpl
-			</artifactId>
-			<version>1.9.1</version>
-		</dependency>
-		<dependency>
-			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
-			<artifactId>
-				de.tudarmstadt.ukp.dkpro.core.castransformation-asl
-			</artifactId>
-			<version>1.9.1</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.upf.taln.uima.clean</groupId>
-			<artifactId>twitter_clean</artifactId>
-			<version>0.2</version>
-		</dependency>
-	</dependencies>
+	
+	<repositories>
+		<repository>
+			<id>taln</id>
+			<url>http://maven-taln.upf.edu/repository/maven-public</url>
+		</repository>
+		<repository>
+			<id>ukp-oss-releases</id>
+			<url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-releases</url>
+		</repository>
+		<repository>
+			<id>ukp-oss-snapshots</id>
+			<url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-snapshots</url>
+		</repository>
+	</repositories>
+	
 	<dependencyManagement>
 		<dependencies>
 			<!-- FORCE JACKSON VERSION -->
@@ -121,20 +72,80 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	<repositories>
-		<repository>
-			<id>taln</id>
-			<url>http://maven-taln.upf.edu/repository/maven-public</url>
-		</repository>
-		<repository>
-			<id>ukp-oss-releases</id>
-			<url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-releases</url>
-		</repository>
-		<repository>
-			<id>ukp-oss-snapshots</id>
-			<url>http://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-snapshots</url>
-		</repository>
-	</repositories>
+	
+	<dependencies>
+		<!-- included through beAWARE-pipelines >
+		<dependency>
+			<groupId>edu.upf.taln.beaware.uima</groupId>
+			<artifactId>beAWARE-components</artifactId>
+			<version>0.9.0-SNAPSHOT</version>
+		</dependency>
+		<-->
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.uima</groupId>
+			<artifactId>uimafit-core</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.uima</groupId>
+			<artifactId>uimaj-core</artifactId>
+			<version>2.10.2</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.upf.taln.beaware.uima</groupId>
+			<artifactId>beaware-pipeline-en</artifactId>
+			<version>${beaware.pipeline.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.upf.taln.beaware.uima</groupId>
+			<artifactId>beaware-pipeline-es</artifactId>
+			<version>${beaware.pipeline.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.upf.taln.beaware.uima</groupId>
+			<artifactId>beaware-pipeline-el</artifactId>
+			<version>${beaware.pipeline.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.upf.taln.beaware.uima</groupId>
+			<artifactId>beaware-pipeline-it</artifactId>
+			<version>${beaware.pipeline.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.upf.taln.beaware.uima</groupId>
+			<artifactId>beaware-pipelines-commons</artifactId>
+			<version>${beaware.pipeline.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.arktools-gpl</artifactId>
+			<version>${dkpro.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.castransformation-asl</artifactId>
+			<version>${dkpro.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.upf.taln.uima.clean</groupId>
+			<artifactId>twitter_clean</artifactId>
+			<version>0.2</version>
+		</dependency>
+	</dependencies>
+	
 	<build>
 		<plugins>
 
@@ -153,10 +164,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
+				<version>${mvn.compiler.version}</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
 				</configuration>
 			</plugin>
 
@@ -202,25 +213,21 @@
 						<configuration>
 							<transformers>
 								<!-- Set the main class of the executable JAR -->
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<mainClass>edu.upf.taln.beaware.uima.textAnalysis.TextAnalysisPipeline</mainClass>
 								</transformer>
 								<!-- Merge the uimaFIT configuration files -->
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+								<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 									<resource>
 										META-INF/org.apache.uima.fit/fsindexes.txt
 									</resource>
 								</transformer>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+								<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 									<resource>
 										META-INF/org.apache.uima.fit/types.txt
 									</resource>
 								</transformer>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+								<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 									<resource>
 										META-INF/org.apache.uima.fit/typepriorities.txt
 									</resource>
@@ -234,6 +241,27 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			
+			<plugin>
+		        <groupId>external.atlassian.jgitflow</groupId>
+		        <artifactId>jgitflow-maven-plugin</artifactId>
+		        <version>1.0-m5.1</version>
+		        <configuration>
+		            <flowInitContext>
+		                <masterBranchName>master</masterBranchName>
+		                <developBranchName>development</developBranchName>
+		                <featureBranchPrefix>feature-</featureBranchPrefix>
+		                <releaseBranchPrefix>release-</releaseBranchPrefix>
+		                <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
+		                <versionTagPrefix>version-</versionTagPrefix>
+		            </flowInitContext>
+<!-- 		            <username>USERNAME_FOR_A_GIT_USER</username> -->
+<!-- 		            <password>PASSWORD_FOR_A_GIT_USER</password> -->
+		            <noDeploy>true</noDeploy>
+		            <squash>false</squash>
+		            <scmCommentPrefix>[RELEASE] </scmCommentPrefix>
+		    	</configuration>
 			</plugin>
 		</plugins>
 	</build>

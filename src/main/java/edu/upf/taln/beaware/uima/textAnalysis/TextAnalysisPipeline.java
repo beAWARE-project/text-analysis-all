@@ -11,7 +11,7 @@ import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.pipeline.JCasIterable;
 import org.apache.uima.jcas.JCas;
 
-import edu.upf.taln.beaware.uima.reader.BeAwareKafkaObserver;
+import edu.upf.taln.beaware.reader.BeAwareKafkaObserver;
 
 /**
  * This pipeline does text analysis for all languages and sources
