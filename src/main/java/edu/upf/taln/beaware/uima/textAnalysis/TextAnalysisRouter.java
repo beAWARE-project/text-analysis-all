@@ -27,13 +27,13 @@ import com.jayway.jsonpath.JsonPath;
 
 import de.tudarmstadt.ukp.dkpro.core.arktools.ArktweetTokenizer;
 import de.tudarmstadt.ukp.dkpro.core.castransformation.ApplyChangesAnnotator;
-import edu.upf.taln.beaware.uima.consumer.BeAwareKafkaConsumer;
+import edu.upf.taln.beaware.consumer.BeAwareKafkaConsumer;
 import edu.upf.taln.beaware.uima.pipeline.BeawarePipeline;
 import edu.upf.taln.beaware.uima.pipeline.EnglishPipelineUd;
 import edu.upf.taln.beaware.uima.pipeline.GreekPipeline;
 import edu.upf.taln.beaware.uima.pipeline.ItalianPipeline;
 import edu.upf.taln.beaware.uima.pipeline.SpanishPipelineUd;
-import edu.upf.taln.beaware.uima.types.BeAwareMetaData;
+import edu.upf.taln.beaware.types.BeAwareMetaData;
 import edu.upf.taln.uima.clean.twitter_clean.CleanTokens;
 
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngine;
@@ -66,16 +66,8 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 	private AnalysisEngine cleaner;
 
 	private AnalysisEngine kafkaWriter;
-
-	@Override
-	public void initialize(UimaContext context) throws ResourceInitializationException {
-		super.initialize(context);
-
-		this.kafkaWriter = createEngine(createEngineDescription(BeAwareKafkaConsumer.class,
-				BeAwareKafkaConsumer.PARAM_KAFKATOPIC,"TOP028_TEXT_ANALYSED",
-				BeAwareKafkaConsumer.PARAM_KAFKABROKERS, kafkaBrokers,
-				BeAwareKafkaConsumer.PARAM_KAFKAKEY, kafkaApiKey
-				));
+	
+	public void initializePipelines() throws ResourceInitializationException {
 
 		try {
 			Map<String,BeawarePipeline>builders = new HashMap<>();
@@ -86,6 +78,8 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 
 			this.pipes = new HashMap<>();
 			Map<String, String> options = new HashMap<String, String>();
+			options.put("babelnet", "/home/ivan/misc/BabelNet-3.7/config");
+			options.put("similFile", "/home/ivan/misc/tensor/resources/sensembed-vectors-merged_bin");
 			for (String lang : builders.keySet()) {
 				this.pipes.put(lang, createEngine(builders.get(lang).build(options)));
 			}
@@ -104,6 +98,54 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 		} catch (UIMAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void initialize(UimaContext context) throws ResourceInitializationException {
+		super.initialize(context);
+
+		this.kafkaWriter = createEngine(createEngineDescription(BeAwareKafkaConsumer.class,
+				BeAwareKafkaConsumer.PARAM_KAFKATOPIC,"TOP028_TEXT_ANALYSED",
+				BeAwareKafkaConsumer.PARAM_KAFKABROKERS, kafkaBrokers,
+				BeAwareKafkaConsumer.PARAM_KAFKAKEY, kafkaApiKey
+				));
+		
+		initializePipelines();
+	}
+	
+	public JCas runPipeline(JCas jcas) throws AnalysisEngineProcessException {
+		// treat tweets differently
+		boolean isTwitter = false;
+		/*
+		if ("TOP001_SOCIAL_MEDIA_TEXT".equals(topic)) {
+			isTwitter = true;
+		};
+		*/
+		
+		// process with appropriate pipeline
+		String lang = jcas.getDocumentLanguage();
+		if (!pipes.containsKey(lang)) {
+			logger.info("unknown language: "+lang);
+			return null; // skip unknown languages
+		}
+		if (isTwitter) {
+			try {
+				this.cleaner.process(jcas);
+				JCas cleanView = jcas.getView(TARGET_VIEW);
+				this.pipes.get(lang).process(cleanView);
+				BeAwareMetaData meta = JCasUtil.selectSingle(jcas, BeAwareMetaData.class);
+				BeAwareMetaData meta2 = (BeAwareMetaData) meta.clone();
+				meta2.setFeatureValue(meta2.getType().getFeatureByBaseName("sofa"), cleanView.getSofa());
+				meta2.addToIndexes(cleanView);
+				return cleanView;
+			} catch (CASException|AnalysisEngineProcessException e) {
+				logger.warning(e.toString());
+				throw new AnalysisEngineProcessException(e);
+			}
+		} else { // not Twitter
+			this.pipes.get(lang).process(jcas);
+			return jcas;
 		}
 	}
 
@@ -140,41 +182,12 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 				}
 			}
 
-			// treat tweets differently
-			boolean isTwitter = false;
-			/*
-			if ("TOP001_SOCIAL_MEDIA_TEXT".equals(topic)) {
-				isTwitter = true;
-			};
-			*/
-
 			// build CAS for processing (like BeAwareKafkaIncidentReader)
 			JCas jcas = messageToCas(kafkaMessage);
-
-			// process with appropriate pipeline
-			String lang = jcas.getDocumentLanguage();
-			if (!pipes.containsKey(lang)) {
-				logger.info("unknown language: "+lang);
-				return; // skip unknown languages
-			}
-			if (isTwitter) {
-				try {
-					this.cleaner.process(jcas);
-					JCas cleanView = jcas.getView(TARGET_VIEW);
-					this.pipes.get(lang).process(cleanView);
-					BeAwareMetaData meta = JCasUtil.selectSingle(jcas, BeAwareMetaData.class);
-					BeAwareMetaData meta2 = (BeAwareMetaData) meta.clone();
-					meta2.setFeatureValue(meta2.getType().getFeatureByBaseName("sofa"), cleanView.getSofa());
-					meta2.addToIndexes(cleanView);
-					this.kafkaWriter.process(cleanView);
-				} catch (CASException|AnalysisEngineProcessException e) {
-					logger.warning(e.toString());
-					throw new AnalysisEngineProcessException(e);
-				}
-			} else { // not Twitter
-				this.pipes.get(lang).process(jcas);
-				this.kafkaWriter.process(jcas);
-			}
+			
+			JCas resultCas = runPipeline(jcas);
+			this.kafkaWriter.process(resultCas);
+			
 		} catch (Exception e) {
 			logger.severe("skipping message:" + kafkaMessage);
 			logger.severe(e.getStackTrace().toString());
