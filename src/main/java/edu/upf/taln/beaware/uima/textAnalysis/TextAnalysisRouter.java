@@ -82,8 +82,8 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 			Map<String, String> options = new HashMap<String, String>();
 			options.put("babelnet", "/resources/babelnet_config");
 			options.put("similFile", "/resources/sensembed-vectors-merged_bin");
-			options.put("conceptUrl", conceptUrl.orElse("http://server01-taln.s.upf.edu:8000"));
-			options.put("geolocationUrl", geolocationUrl.orElse("http://server01-taln.s.upf.edu:8001"));
+			options.put("conceptUrlEN", conceptUrl.orElse("http://server01-taln.s.upf.edu:8000"));
+			options.put("geolocationUrlEN", geolocationUrl.orElse("http://server01-taln.s.upf.edu:8001"));
 			
 			for (String lang : builders.keySet()) {
 				this.pipes.put(lang, createEngine(builders.get(lang).build(options)));
