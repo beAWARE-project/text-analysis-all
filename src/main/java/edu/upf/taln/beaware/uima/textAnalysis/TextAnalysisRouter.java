@@ -1,5 +1,8 @@
 package edu.upf.taln.beaware.uima.textAnalysis;
 
+import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngine;
+import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +12,6 @@ import java.util.logging.Logger;
 import org.apache.uima.UIMAException;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_engine.AnalysisEngine;
-import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.cas.CAS;
 import org.apache.uima.cas.CASException;
@@ -21,7 +23,6 @@ import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
-import org.apache.uima.util.CasCopier;
 
 import com.google.gson.GsonBuilder;
 import com.jayway.jsonpath.JsonPath;
@@ -29,16 +30,13 @@ import com.jayway.jsonpath.JsonPath;
 import de.tudarmstadt.ukp.dkpro.core.arktools.ArktweetTokenizer;
 import de.tudarmstadt.ukp.dkpro.core.castransformation.ApplyChangesAnnotator;
 import edu.upf.taln.beaware.consumer.BeAwareKafkaConsumer;
+import edu.upf.taln.beaware.types.BeAwareMetaData;
 import edu.upf.taln.beaware.uima.pipeline.BeawarePipeline;
 import edu.upf.taln.beaware.uima.pipeline.EnglishPipelineUd;
 import edu.upf.taln.beaware.uima.pipeline.GreekPipeline;
 import edu.upf.taln.beaware.uima.pipeline.ItalianPipeline;
 import edu.upf.taln.beaware.uima.pipeline.SpanishPipelineUd;
-import edu.upf.taln.beaware.types.BeAwareMetaData;
 import edu.upf.taln.uima.clean.twitter_clean.CleanTokens;
-
-import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngine;
-import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
 
 public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 
@@ -223,6 +221,7 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 				metadata.setBegin(0);
 				metadata.setEnd(metadata.getView().getDocumentText().length());
 			}
+			metadata.setLanguage(jcas.getDocumentLanguage());
 			metadata.addToIndexes();
 			return jcas;
 		} catch (UIMAException e1) {
