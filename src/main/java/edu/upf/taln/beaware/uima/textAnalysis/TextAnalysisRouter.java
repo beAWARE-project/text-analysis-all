@@ -174,7 +174,7 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 			// filters
 			// don't process actionType=update from APP
 			if (topic.equals("TOP021_INCIDENT_REPORT")) {
-				String filterApp = "$[?(@.body.description && @.header.actionType == 'Alert' && @.header.sender == 'SCAPP')]";
+				String filterApp = "$[?(@.body.description && @.header.actionType == 'Alert' && (@.header.sender == 'SCAPP' ||  @.header.sender == 'FRAPP'))]";
 				List<String> matches = JsonPath.read(kafkaMessage, filterApp);
 				if (matches.isEmpty()) {
 					logger.info("rejected by filter: " + kafkaMessage);
