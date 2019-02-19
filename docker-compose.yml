@@ -1,0 +1,54 @@
+version: '3.2'
+services:
+  geolocation:
+    image: maven-taln.upf.edu/uima_taln_geolocation:20190125b
+    ports:
+      - "8001:8000"
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1"
+          memory: 8GB
+    volumes:
+      - type: bind
+        source: "/resources/geolocation/indices/"
+        target: "/app/indices"
+        read_only: true
+  concept_candidates:
+    image: maven-taln.upf.edu/uima_taln_concept:20190130b
+    ports:
+      - "8002:8000"
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1"
+          memory: 4GB
+    volumes:
+      - type: bind
+        source: "/resources/concept_extractor/indices/"
+        target: "/app/indices"
+        read_only: true
+    environment:
+      - LANGUAGE=en
+  text-analysis-all:
+    image: maven-taln.upf.edu/text-analysis-all:20190218
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1"
+          memory: 10GB
+    volumes:
+      - type: bind
+        source: "/resources/BabelNet-3.7"
+        target: "/resources/BabelNet-3.7"
+        read_only: true
+      - type: bind
+        source: "/resources/sensembed-vectors-merged_bin"
+        target: "/resources/sensembed-vectors-merged_bin"
+        read_only: true
+    environment:
+      - CONCEPT_URL=http://concept_candidates:8000
+      - GEOLOCATION_URL=http://geolocation:8000

@@ -3,6 +3,7 @@ package edu.upf.taln.beaware.uima.textAnalysis;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.apache.uima.UIMAException;
@@ -76,10 +77,16 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 			builders.put("el", new GreekPipeline());
 			builders.put("it", new ItalianPipeline());
 
+			Optional<String> conceptUrl = Optional.ofNullable(System.getenv("CONCEPT_URL"));
+			Optional<String> geolocationUrl = Optional.ofNullable(System.getenv("GEOLOCATION_URL"));
+
 			this.pipes = new HashMap<>();
 			Map<String, String> options = new HashMap<String, String>();
-			options.put("babelnet", "/home/ivan/misc/BabelNet-3.7/config");
-			options.put("similFile", "/home/ivan/misc/tensor/resources/sensembed-vectors-merged_bin");
+			options.put("babelnet", "/resources/babelnet_config");
+			options.put("similFile", "/resources/sensembed-vectors-merged_bin");
+			options.put("conceptUrl", conceptUrl.orElse("http://server01-taln.s.upf.edu:8000"));
+			options.put("geolocationUrl", geolocationUrl.orElse("http://server01-taln.s.upf.edu:8001"));
+			
 			for (String lang : builders.keySet()) {
 				this.pipes.put(lang, createEngine(builders.get(lang).build(options)));
 			}
