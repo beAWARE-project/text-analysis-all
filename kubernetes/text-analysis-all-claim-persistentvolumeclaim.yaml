@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: text-analysis-all-claim
+  name: text-analysis-all-claim
+spec:
+  storageClassName: ibmc-file-gold
+  accessModes:
+  - ReadOnlyMany
+  resources:
+    requests:
+      storage: 100Mi
+status: {}
