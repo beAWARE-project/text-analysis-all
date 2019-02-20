@@ -1,22 +1,21 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.16.0 (0c01309)
-  creationTimestamp: null
   labels:
-    io.kompose.service: text-analysis-all
+    app: text-analysis-all
   name: text-analysis-all
 spec:
   replicas: 1
   strategy:
-    type: Recreate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  revisionHistoryLimit: 5
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        io.kompose.service: text-analysis-all
+        app: text-analysis-all
     spec:
       containers:
       - env:
@@ -24,15 +23,30 @@ spec:
           value: http://concept_candidates:8000
         - name: GEOLOCATION_URL
           value: http://geolocation:8000
-        image: maven-taln.upf.edu/text-analysis-all:20190218
+        - name: SECRET_MH_API_KEY
+          valueFrom:
+           secretKeyRef:
+            name: mh-secret2
+            key: api_key
+        - name: SECRET_MH_BROKERS
+          valueFrom:
+           secretKeyRef:
+            name: mh-secret2
+            key: kafka_brokers_sasl
+        - name: SECRET_MONGO_URI
+          valueFrom:
+           secretKeyRef:
+            name: mongo-secret
+            key: uri
+        image: maven-taln.upf.edu/beaware/text-analysis-all:20190220
         name: text-analysis-all
         resources:
           limits:
             cpu: "1"
             memory: "10Gi"
           requests:
-            cpu: "500m"
-            memory: "1Gi"
+            cpu: "200m"
+            memory: "2Gi"
         volumeMounts:
         - mountPath: /resources/BabelNet-3.7
           name: text-analysis-all-claim
