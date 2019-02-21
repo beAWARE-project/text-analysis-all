@@ -10,17 +10,17 @@ node ('beaware-jenkins-slave') {
     }
 
     stage ('Compile (Maven)') {
-        sh 'mvn clean package -U'
+//        sh 'mvn clean package -U'
     }
 
     stage ('Build docker image') {
-		sh 'docker build -t beaware/text-analysis-all:${BUILD_NUMBER} .'
+//		sh 'docker build -t beaware/text-analysis-all:${BUILD_NUMBER} .'
     }
 
     stage ('Push docker image') {
-        withDockerRegistry([credentialsId: 'dockerhub-credentials']) {
-            sh 'docker push beaware/text-analysis-all:${BUILD_NUMBER}'
-        }
+//        withDockerRegistry([credentialsId: 'dockerhub-credentials']) {
+//            sh 'docker push beaware/text-analysis-all:${BUILD_NUMBER}'
+//        }
     }
 
     stage ('Deploy') {
