@@ -33,7 +33,7 @@ services:
     environment:
       - LANGUAGE=en
   text-analysis-all:
-    image: maven-taln.upf.edu/text-analysis-all:20190218
+    image: maven-taln.upf.edu/beaware/text-analysis-all:20190220
     deploy:
       replicas: 1
       resources:
