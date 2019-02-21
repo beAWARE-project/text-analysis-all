@@ -58,6 +58,6 @@ spec:
       volumes:
       - name: text-analysis-all-claim
         persistentVolumeClaim:
-          claimName: text-analysis-all-claim
+          claimName: text-analysis-all-claim0
           readOnly: true
 status: {}
