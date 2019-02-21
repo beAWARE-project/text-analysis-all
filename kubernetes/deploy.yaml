@@ -6,9 +6,6 @@ metadata:
   name: text-analysis-all
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: text-analysis-all
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -21,30 +18,46 @@ spec:
         app: text-analysis-all
     spec:
       containers:
-      - image: beaware/text-analysis-all:IMAGE_TAG
-        imagePullPolicy: Always
+      - env:
+        - name: CONCEPT_URL
+          value: http://concept_candidates:8000
+        - name: GEOLOCATION_URL
+          value: http://geolocation:8000
+        - name: SECRET_MH_API_KEY
+          valueFrom:
+           secretKeyRef:
+            name: mh-secret2
+            key: api_key
+        - name: SECRET_MH_BROKERS
+          valueFrom:
+           secretKeyRef:
+            name: mh-secret2
+            key: kafka_brokers_sasl
+        - name: SECRET_MONGO_URI
+          valueFrom:
+           secretKeyRef:
+            name: mongo-secret
+            key: uri
+        image: maven-taln.upf.edu/beaware/text-analysis-all:20190220
         name: text-analysis-all
-        ports:
-        - containerPort: 80
-          name: http
-          protocol: TCP
         resources:
+          limits:
+            cpu: "1"
+            memory: "10Gi"
           requests:
-            cpu: 200m
-            memory: 2Gi
-        env:
-          - name: SECRET_MH_API_KEY
-            valueFrom:
-             secretKeyRef:
-              name: mh-secret2
-              key: api_key
-          - name: SECRET_MH_BROKERS
-            valueFrom:
-             secretKeyRef:
-              name: mh-secret2
-              key: kafka_brokers_sasl
-          - name: SECRET_MONGO_URI
-            valueFrom:
-             secretKeyRef:
-              name: mongo-secret
-              key: uri
+            cpu: "200m"
+            memory: "2Gi"
+        volumeMounts:
+        - mountPath: /resources/BabelNet-3.7
+          name: text-analysis-all-claim
+          readOnly: true
+        - mountPath: /resources/sensembed-vectors-merged_bin
+          name: text-analysis-all-claim
+          readOnly: true
+      restartPolicy: Always
+      volumes:
+      - name: text-analysis-all-claim
+        persistentVolumeClaim:
+          claimName: text-analysis-all-claim0
+          readOnly: true
+status: {}
