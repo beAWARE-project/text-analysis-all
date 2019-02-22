@@ -4,6 +4,7 @@ package edu.upf.taln.beaware.uima.textAnalysis;
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
 import static org.apache.uima.fit.factory.CollectionReaderFactory.createReaderDescription;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
@@ -24,6 +25,7 @@ public class TextAnalysisPipeline {
 
 		String kafkaBrokers = System.getenv("SECRET_MH_BROKERS");
 		String kafkaApiKey = System.getenv("SECRET_MH_API_KEY");
+		String groupId = Optional.ofNullable(System.getenv("KAFKA_GROUPID")).orElse("text-analysis-all");
 
 		// setup components
 		CollectionReaderDescription reader = createReaderDescription(BeAwareKafkaObserver.class,
@@ -31,7 +33,7 @@ public class TextAnalysisPipeline {
 				BeAwareKafkaObserver.PARAM_KAFKABROKERS, kafkaBrokers,
 				BeAwareKafkaObserver.PARAM_KAFKASEEKTOEND, true,
 				BeAwareKafkaObserver.PARAM_KAFKAKEY, kafkaApiKey,
-				BeAwareKafkaObserver.PARAM_GROUPID, "text-analysis-all"
+				BeAwareKafkaObserver.PARAM_GROUPID, groupId
 				);
 		AnalysisEngineDescription ae = createEngineDescription(TextAnalysisRouter.class,
 				TextAnalysisRouter.PARAM_KAFKABROKERS, kafkaBrokers,
