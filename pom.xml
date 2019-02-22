@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>beaware</groupId>
 	<artifactId>text-analysis-all</artifactId>
-	<version>0.2.1-SNAPSHOT</version>
+	<version>0.2.0</version>
 	<packaging>jar</packaging>
 
 	<name>text-analysis-all</name>
