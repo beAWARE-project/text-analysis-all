@@ -18,9 +18,9 @@ node ('beaware-jenkins-slave') {
     }
 
     stage ('Push docker image') {
-//        }
-//            sh 'docker push beaware/text-analysis-all:${BUILD_NUMBER}'
 //        withDockerRegistry([credentialsId: 'dockerhub-credentials']) {
+//            sh 'docker push beaware/text-analysis-all:${BUILD_NUMBER}'
+//        }
     }
 
     stage ('Deploy') {
