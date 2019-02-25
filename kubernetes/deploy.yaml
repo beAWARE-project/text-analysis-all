@@ -38,7 +38,7 @@ spec:
            secretKeyRef:
             name: mongo-secret
             key: uri
-        image: maven-taln.upf.edu/beaware/text-analysis-all:20190222
+        image: maven-taln.upf.edu/beaware/text-analysis-all:20190225
         name: text-analysis-all
         resources:
           limits:
@@ -48,10 +48,7 @@ spec:
             cpu: "200m"
             memory: "2Gi"
         volumeMounts:
-        - mountPath: /resources/BabelNet-3.7
-          name: text-analysis-all-claim
-          readOnly: true
-        - mountPath: /resources/sensembed-vectors-merged_bin
+        - mountPath: /resources/
           name: text-analysis-all-claim
           readOnly: true
       restartPolicy: Always

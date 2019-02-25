@@ -10,21 +10,24 @@ node ('beaware-jenkins-slave') {
     }
 
     stage ('Compile (Maven)') {
-//        sh 'mvn clean package -U'
+//        sh 'mvn clean package -U
+	sh 'echo skipping mvn compile'
     }
 
     stage ('Build docker image') {
 //		sh 'docker build -t beaware/text-analysis-all:${BUILD_NUMBER} .'
+	sh 'echo skipping docker build'
     }
 
     stage ('Push docker image') {
-//        withDockerRegistry([credentialsId: 'dockerhub-credentials']) {
+        withDockerRegistry([credentialsId: 'dockerhub-credentials']) {
 //            sh 'docker push beaware/text-analysis-all:${BUILD_NUMBER}'
-//        }
+		sh 'echo skipping docker push'
+        }
     }
 
     stage ('Deploy') {
- 		sh ''' sed -i 's/IMAGE_TAG/'"$BUILD_NUMBER"'/g' kubernetes/deploy.yaml '''
+ 	sh ''' sed -i 's/IMAGE_TAG/'"$BUILD_NUMBER"'/g' kubernetes/deploy.yaml '''
         sh 'kubectl apply -f kubernetes/deploy.yaml -n prod --validate=false'
     }
     
