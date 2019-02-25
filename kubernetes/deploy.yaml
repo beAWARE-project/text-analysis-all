@@ -20,7 +20,7 @@ spec:
       containers:
       - env:
         - name: CONCEPT_URL
-          value: http://concept_candidates:8000
+          value: http://concept-candidates:8000
         - name: GEOLOCATION_URL
           value: http://geolocation:8000
         - name: SECRET_MH_API_KEY
