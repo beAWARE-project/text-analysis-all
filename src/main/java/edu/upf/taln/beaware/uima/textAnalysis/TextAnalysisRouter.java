@@ -24,6 +24,7 @@ import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 
+import com.google.common.base.Throwables;
 import com.google.gson.GsonBuilder;
 import com.jayway.jsonpath.JsonPath;
 
@@ -80,7 +81,7 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 
 			this.pipes = new HashMap<>();
 			Map<String, String> options = new HashMap<String, String>();
-			options.put("babelnet", "/resources/babelnet_config");
+			options.put("babelnet", "/babelnet_config");
 			options.put("similFile", "/resources/sensembed-vectors-merged_bin");
 			options.put("conceptUrlEN", conceptUrl.orElse("http://concept_candidates:8000"));
 			options.put("geolocationUrlEN", geolocationUrl.orElse("http://geolocation:8000"));
@@ -195,7 +196,7 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 			
 		} catch (Exception e) {
 			logger.severe("skipping message:" + kafkaMessage);
-			logger.severe(e.getStackTrace().toString());
+			logger.severe(Throwables.getStackTraceAsString(e));
 		}
 	}
 
