@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.tudarmstadt.ukp.dkpro.core.io.text.TextReader;
-import edu.uof.taln.beaware.extractor.Entity;
+import edu.upf.taln.beaware.commons.extractor.Entity;
 import edu.upf.taln.beaware.extractor.EntityExtractor;
 import edu.upf.taln.beaware.extractor.RelationExtractor;
 
@@ -45,7 +45,7 @@ public class PipelineTest {
 				XmiWriter.PARAM_OVERWRITE, true);*/
 		
 		int i = 1;
-		for(JCas jcas : SimplePipeline.iteratePipeline(reader)){
+		for (JCas jcas : SimplePipeline.iteratePipeline(reader)) {
 			tar.runPipeline(jcas);
 			
 			String viewName = jcas.getViewName();
@@ -61,8 +61,7 @@ public class PipelineTest {
 	        om.enable(SerializationFeature.INDENT_OUTPUT);
 			String jsonOutput = om.writeValueAsString(response);
 	        
-	        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(output + "/" + language + i + ".json")))
-	        {
+	        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(output + "/" + language + i + ".json"))) {
 	            writer.write(jsonOutput);
 	        }
 	        
@@ -70,22 +69,22 @@ public class PipelineTest {
 		}
 	}
 	
-	@Test
+	/*@Test
 	public void testItTweets() throws Exception {
-		String testFilePath = "/home/ivan/misc/beaware/tweetsTest/it/it.txt";
+		String testFilePath = "/home/ivan/misc/beaware/tweetsTest/it/analysis2/it.txt";
 		File testFile = new File(testFilePath);
 		String inputFolderPath = testFile.getParentFile().getAbsolutePath();
 		String pattern = "*.txt"; //testFile.getName();
-		testBeawarePipeline(inputFolderPath, pattern, "it", "/home/ivan/misc/beaware/tweetsTest/it/result");
+		testBeawarePipeline(inputFolderPath, pattern, "it", "/home/ivan/misc/beaware/tweetsTest/it/analysis2/result2");
 	}
 	
 	@Test
 	public void testEnTweets() throws Exception {
-		String testFilePath = "/home/ivan/misc/beaware/tweetsTest/en/en.txt";
+		String testFilePath = "/home/ivan/misc/beaware/tweetsTest/en/analysis2/en.txt";
 		File testFile = new File(testFilePath);
 		String inputFolderPath = testFile.getParentFile().getAbsolutePath();
 		String pattern = "*.txt"; //testFile.getName();
-		testBeawarePipeline(inputFolderPath, pattern, "en", "/home/ivan/misc/beaware/tweetsTest/en/result");
+		testBeawarePipeline(inputFolderPath, pattern, "en", "/home/ivan/misc/beaware/tweetsTest/en/analysis2/result2");
 	}
 	
 	@Test
@@ -95,5 +94,5 @@ public class PipelineTest {
 		String inputFolderPath = testFile.getParentFile().getAbsolutePath();
 		String pattern = testFile.getName();
 		testBeawarePipeline(inputFolderPath, pattern, "en", "/home/ivan/misc/beaware/tests/text-analysis-all");
-	}
+	}*/
 }
