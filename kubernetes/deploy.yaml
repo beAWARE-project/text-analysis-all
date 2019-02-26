@@ -38,7 +38,7 @@ spec:
            secretKeyRef:
             name: mongo-secret
             key: uri
-        image: maven-taln.upf.edu/beaware/text-analysis-all:20190225
+        image: maven-taln.upf.edu/beaware/text-analysis-all:20190226
         name: text-analysis-all
         resources:
           limits:
