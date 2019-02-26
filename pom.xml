@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>beaware</groupId>
 	<artifactId>text-analysis-all</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>text-analysis-all</name>
@@ -14,7 +14,7 @@
 		<mvn.compiler.version>3.5.1</mvn.compiler.version>
 		<dkpro.version>1.9.1</dkpro.version>
 		<dkpro.taln.version>1.9.1-taln</dkpro.taln.version>
-		<beaware.pipeline.version>0.5.0</beaware.pipeline.version>
+		<beaware.pipeline.version>0.6.0</beaware.pipeline.version>
 		<lucene.version>4.10.4</lucene.version> <!-- newer versions are incompatible with Babelnet -->
 	</properties>
 
