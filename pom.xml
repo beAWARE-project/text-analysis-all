@@ -14,7 +14,7 @@
 		<mvn.compiler.version>3.5.1</mvn.compiler.version>
 		<dkpro.version>1.9.1</dkpro.version>
 		<dkpro.taln.version>1.9.1-taln</dkpro.taln.version>
-		<beaware.pipeline.version>0.6.0</beaware.pipeline.version>
+		<beaware.pipeline.version>0.7.0-SNAPSHOT</beaware.pipeline.version>
 		<lucene.version>4.10.4</lucene.version> <!-- newer versions are incompatible with Babelnet -->
 	</properties>
 
