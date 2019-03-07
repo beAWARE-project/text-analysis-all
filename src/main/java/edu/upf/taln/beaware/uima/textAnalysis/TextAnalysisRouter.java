@@ -66,7 +66,7 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 	private AnalysisEngine cleaner;
 
 	private AnalysisEngine kafkaWriter;
-	
+
 	public void initializePipelines() throws ResourceInitializationException {
 
 		try {
@@ -85,9 +85,10 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 			options.put("similFile", "/resources/sensembed-vectors-merged_bin");
 			options.put("conceptUrl", conceptUrl.orElse("http://concept_candidates:8000"));
 			options.put("geolocationUrl", geolocationUrl.orElse("http://geolocation:8000"));
-			
+
 			for (String lang : builders.keySet()) {
 				if(lang.equals("es")) {
+					// WARNING: doing it like this you can't count on having the default options for other languages as they may be overwritte
 					options.put("conceptUrl", conceptUrl.orElse("http://concept_candidates_es:8000"));
 				}
 				this.pipes.put(lang, createEngine(builders.get(lang).build(options)));
@@ -119,10 +120,10 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 				BeAwareKafkaConsumer.PARAM_KAFKABROKERS, kafkaBrokers,
 				BeAwareKafkaConsumer.PARAM_KAFKAKEY, kafkaApiKey
 				));
-		
+
 		initializePipelines();
 	}
-	
+
 	public JCas runPipeline(JCas jcas) throws AnalysisEngineProcessException {
 		// treat tweets differently
 		boolean isTwitter = false;
@@ -130,8 +131,8 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 		if ("TOP001_SOCIAL_MEDIA_TEXT".equals(topic)) {
 			isTwitter = true;
 		};
-		*/
-		
+		 */
+
 		// process with appropriate pipeline
 		String lang = jcas.getDocumentLanguage();
 		if (!pipes.containsKey(lang)) {
@@ -193,10 +194,10 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 
 			// build CAS for processing (like BeAwareKafkaIncidentReader)
 			JCas jcas = messageToCas(kafkaMessage);
-			
+
 			JCas resultCas = runPipeline(jcas);
 			this.kafkaWriter.process(resultCas);
-			
+
 		} catch (Exception e) {
 			logger.severe("skipping message:" + kafkaMessage);
 			logger.severe(Throwables.getStackTraceAsString(e));

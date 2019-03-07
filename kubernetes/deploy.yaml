@@ -38,15 +38,15 @@ spec:
            secretKeyRef:
             name: mongo-secret
             key: uri
-        image: maven-taln.upf.edu/beaware/text-analysis-all:20190225
+        image: maven-taln.upf.edu/beaware/text-analysis-all:20190307
         name: text-analysis-all
         resources:
           limits:
             cpu: "1"
-            memory: "10Gi"
+            memory: "15Gi"
           requests:
             cpu: "200m"
-            memory: "2Gi"
+            memory: "6Gi"
         volumeMounts:
         - mountPath: /resources/
           name: text-analysis-all-claim
