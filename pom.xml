@@ -14,7 +14,7 @@
 		<mvn.compiler.version>3.5.1</mvn.compiler.version>
 		<dkpro.version>1.9.1</dkpro.version>
 		<dkpro.taln.version>1.9.1-taln</dkpro.taln.version>
-		<beaware.pipeline.version>0.6.1</beaware.pipeline.version>
+		<beaware.pipeline.version>2.1.0-SNAPSHOT</beaware.pipeline.version>
 		<lucene.version>4.10.4</lucene.version> <!-- newer versions are incompatible with Babelnet -->
 	</properties>
 
@@ -126,28 +126,33 @@
 			<version>2.10.2</version>
 		</dependency>
 		<dependency>
-			<groupId>edu.upf.taln.beaware.uima</groupId>
-			<artifactId>beaware-pipeline-en</artifactId>
+			<groupId>edu.upf.taln.beaware.en</groupId>
+			<artifactId>beaware-en-analysis</artifactId>
 			<version>${beaware.pipeline.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>edu.upf.taln.beaware.uima</groupId>
-			<artifactId>beaware-pipeline-es</artifactId>
+			<groupId>edu.upf.taln.beaware.es</groupId>
+			<artifactId>beaware-es-analysis</artifactId>
 			<version>${beaware.pipeline.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>edu.upf.taln.beaware.uima</groupId>
-			<artifactId>beaware-pipeline-el</artifactId>
+			<groupId>edu.upf.taln.beaware.el</groupId>
+			<artifactId>beaware-el-analysis</artifactId>
 			<version>${beaware.pipeline.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>edu.upf.taln.beaware.uima</groupId>
-			<artifactId>beaware-pipeline-it</artifactId>
+			<groupId>edu.upf.taln.beaware.it</groupId>
+			<artifactId>beaware-it-analysis</artifactId>
 			<version>${beaware.pipeline.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>edu.upf.taln.beaware.uima</groupId>
-			<artifactId>beaware-pipelines-commons</artifactId>
+			<groupId>edu.upf.taln.beaware</groupId>
+			<artifactId>beaware-commons</artifactId>
+			<version>${beaware.pipeline.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.upf.taln.beaware</groupId>
+			<artifactId>beaware-kafka</artifactId>
 			<version>${beaware.pipeline.version}</version>
 		</dependency>
 		<dependency>
@@ -175,6 +180,11 @@
 			<artifactId>lucene-codecs</artifactId>
 			<version>${lucene.version}</version>
 		</dependency -->
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>2.3.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

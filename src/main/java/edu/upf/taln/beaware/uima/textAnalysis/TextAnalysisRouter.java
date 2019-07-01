@@ -30,13 +30,12 @@ import com.jayway.jsonpath.JsonPath;
 
 import de.tudarmstadt.ukp.dkpro.core.arktools.ArktweetTokenizer;
 import de.tudarmstadt.ukp.dkpro.core.castransformation.ApplyChangesAnnotator;
-import edu.upf.taln.beaware.consumer.BeAwareKafkaConsumer;
-import edu.upf.taln.beaware.types.BeAwareMetaData;
-import edu.upf.taln.beaware.uima.pipeline.BeawarePipeline;
-import edu.upf.taln.beaware.uima.pipeline.EnglishPipelineUd;
-import edu.upf.taln.beaware.uima.pipeline.GreekPipeline;
-import edu.upf.taln.beaware.uima.pipeline.ItalianPipeline;
-import edu.upf.taln.beaware.uima.pipeline.SpanishPipelineUd;
+import edu.upf.taln.beaware.analysis.EnglishPipelineUD;
+import edu.upf.taln.beaware.analysis.GreekPipelineUD;
+import edu.upf.taln.beaware.analysis.ItalianPipelineUD;
+import edu.upf.taln.beaware.analysis.SpanishPipelineUD;
+import edu.upf.taln.beaware.kafka.AnalysisKafkaConsumer;
+import edu.upf.taln.beaware.kafka.types.BeAwareMetaData;
 import edu.upf.taln.uima.clean.twitter_clean.CleanTokens;
 
 public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
@@ -71,25 +70,28 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 
 		try {
 			Map<String,BeawarePipeline>builders = new HashMap<>();
-			builders.put("en", new EnglishPipelineUd());
-			builders.put("es", new SpanishPipelineUd());
-			builders.put("el", new GreekPipeline());
-			builders.put("it", new ItalianPipeline());
+			builders.put("en", new EnglishPipelineUD());
+			builders.put("es", new SpanishPipelineUD());
+			builders.put("el", new GreekPipelineUD());
+			builders.put("it", new ItalianPipelineUD());
 
-			Optional<String> conceptUrl = Optional.ofNullable(System.getenv("CONCEPT_URL"));
+			Optional<String> conceptEnUrl = Optional.ofNullable(System.getenv("CONCEPT_URL"));
+			Optional<String> conceptEsUrl = Optional.ofNullable(System.getenv("CONCEPT_ES_URL"));
 			Optional<String> geolocationUrl = Optional.ofNullable(System.getenv("GEOLOCATION_URL"));
+			Optional<String> nerEnUrl = Optional.ofNullable(System.getenv("NER_EN_URL"));
+			Optional<String> nerEsUrl = Optional.ofNullable(System.getenv("NER_ES_URL"));
 
 			this.pipes = new HashMap<>();
 			Map<String, String> options = new HashMap<String, String>();
 			options.put("babelnet", "/babelnet_config");
 			options.put("similFile", "/resources/sensembed-vectors-merged_bin");
-			options.put("conceptUrl", conceptUrl.orElse("http://concept_candidates:8000"));
+			options.put("conceptUrl", conceptEnUrl.orElse("http://concept_candidates:8000"));
 			options.put("geolocationUrl", geolocationUrl.orElse("http://geolocation:8000"));
 
 			for (String lang : builders.keySet()) {
 				if(lang.equals("es")) {
 					// WARNING: doing it like this you can't count on having the default options for other languages as they may be overwritte
-					options.put("conceptUrl", conceptUrl.orElse("http://concept_candidates_es:8000"));
+					options.put("conceptUrl", conceptEsUrl.orElse("http://concept_candidates_es:8000"));
 				}
 				this.pipes.put(lang, createEngine(builders.get(lang).build(options)));
 			}
@@ -115,10 +117,10 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 	public void initialize(UimaContext context) throws ResourceInitializationException {
 		super.initialize(context);
 
-		this.kafkaWriter = createEngine(createEngineDescription(BeAwareKafkaConsumer.class,
-				BeAwareKafkaConsumer.PARAM_KAFKATOPIC,"TOP028_TEXT_ANALYSED",
-				BeAwareKafkaConsumer.PARAM_KAFKABROKERS, kafkaBrokers,
-				BeAwareKafkaConsumer.PARAM_KAFKAKEY, kafkaApiKey
+		this.kafkaWriter = createEngine(createEngineDescription(AnalysisKafkaConsumer.class,
+				AnalysisKafkaConsumer.PARAM_KAFKATOPIC,"TOP028_TEXT_ANALYSED",
+				AnalysisKafkaConsumer.PARAM_KAFKABROKERS, kafkaBrokers,
+				AnalysisKafkaConsumer.PARAM_KAFKAKEY, kafkaApiKey
 				));
 
 		initializePipelines();
