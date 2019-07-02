@@ -18,9 +18,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.tudarmstadt.ukp.dkpro.core.io.text.TextReader;
+import edu.upf.taln.beaware.analysis.extractor.EntityExtractor;
+import edu.upf.taln.beaware.analysis.extractor.RelationExtractor;
 import edu.upf.taln.beaware.commons.extractor.Entity;
-import edu.upf.taln.beaware.extractor.EntityExtractor;
-import edu.upf.taln.beaware.extractor.RelationExtractor;
 
 public class PipelineTest {
 	

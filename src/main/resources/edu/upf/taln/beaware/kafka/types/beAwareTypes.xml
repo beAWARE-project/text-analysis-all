@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<typeSystemDescription xmlns="http://uima.apache.org/resourceSpecifier">
+	<name>beAwareTypes</name>
+	<description />
+	<version>1.0</version>
+	<vendor />
+	<imports>
+		<import name="desc.type.metadata_customized" />
+	</imports>
+	<types>
+		<typeDescription>
+			<name>edu.upf.taln.beaware.types.BeAwareMetaData</name>
+			<description />
+			<supertypeName>de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData
+			</supertypeName>
+			<features>
+				<featureDescription>
+					<name>kafkaMessage</name>
+					<description />
+					<rangeTypeName>uima.cas.String</rangeTypeName>
+				</featureDescription>
+			</features>
+		</typeDescription>
+		<typeDescription>
+			<name>edu.upf.taln.beaware.types.LocationCandidate</name>
+			<description />
+			<supertypeName>uima.tcas.Annotation</supertypeName>
+			<features>
+				<featureDescription>
+					<name>locationType</name>
+					<description>Location Type</description>
+					<rangeTypeName>uima.cas.String</rangeTypeName>
+				</featureDescription>
+				<featureDescription>
+					<name>locationName</name>
+					<description>Location Name</description>
+					<rangeTypeName>uima.cas.String</rangeTypeName>
+				</featureDescription>
+            </features>
+		</typeDescription>
+                
+        <typeDescription>
+			<name>edu.upf.taln.beaware.types.BasicConcept</name>
+			<description />
+			<supertypeName>uima.tcas.Annotation</supertypeName>
+			<features>
+				<featureDescription>
+					<name>basicConceptType</name>
+					<description>basicConcept Type</description>
+					<rangeTypeName>uima.cas.String</rangeTypeName>
+				</featureDescription>
+				<featureDescription>
+					<name>basicConceptName</name>
+					<description>basicConcept Name</description>
+					<rangeTypeName>uima.cas.String</rangeTypeName>
+				</featureDescription>
+                <featureDescription>
+					<name>basicConceptPos</name>
+					<description>basicConcept Pos</description>
+					<rangeTypeName>uima.cas.String</rangeTypeName>
+				</featureDescription>
+			</features>
+		</typeDescription>
+                
+	</types>
+
+</typeSystemDescription>

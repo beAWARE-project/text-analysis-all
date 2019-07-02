@@ -12,7 +12,7 @@ import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.pipeline.JCasIterable;
 import org.apache.uima.jcas.JCas;
 
-import edu.upf.taln.beaware.reader.BeAwareKafkaObserver;
+import edu.upf.taln.beaware.kafka.KafkaReader;
 
 /**
  * This pipeline does text analysis for all languages and sources
@@ -28,12 +28,12 @@ public class TextAnalysisPipeline {
 		String groupId = Optional.ofNullable(System.getenv("KAFKA_GROUPID")).orElse("text-analysis-all");
 
 		// setup components
-		CollectionReaderDescription reader = createReaderDescription(BeAwareKafkaObserver.class,
-				BeAwareKafkaObserver.PARAM_KAFKATOPIC,"TOP010_AUDIO_ANALYZED,TOP001_SOCIAL_MEDIA_TEXT,TOP021_INCIDENT_REPORT",
-				BeAwareKafkaObserver.PARAM_KAFKABROKERS, kafkaBrokers,
-				BeAwareKafkaObserver.PARAM_KAFKASEEKTOEND, true,
-				BeAwareKafkaObserver.PARAM_KAFKAKEY, kafkaApiKey,
-				BeAwareKafkaObserver.PARAM_GROUPID, groupId
+		CollectionReaderDescription reader = createReaderDescription(KafkaReader.class,
+				KafkaReader.PARAM_KAFKATOPIC,"TOP010_AUDIO_ANALYZED,TOP001_SOCIAL_MEDIA_TEXT,TOP021_INCIDENT_REPORT",
+				KafkaReader.PARAM_KAFKABROKERS, kafkaBrokers,
+				KafkaReader.PARAM_KAFKASEEKTOEND, true,
+				KafkaReader.PARAM_KAFKAKEY, kafkaApiKey,
+				KafkaReader.PARAM_GROUPID, groupId
 				);
 		AnalysisEngineDescription ae = createEngineDescription(TextAnalysisRouter.class,
 				TextAnalysisRouter.PARAM_KAFKABROKERS, kafkaBrokers,

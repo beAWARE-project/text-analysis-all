@@ -1,0 +1,76 @@
+{
+  "header": {
+    "topicName": "TOP028_TEXT_ANALYSED",
+    "topicMajorVersion": 0.0,
+    "topicMinorVersion": 1.0,
+    "sender": "MTA",
+    "msgIdentifier": "3380733b-ce59-45e2-b25d-ca7e0312b7f9",
+    "sentUTC": "2019-06-14T09:06:53.532Z",
+    "status": "Actual",
+    "actionType": "Update",
+    "specificSender": "citizen",
+    "scope": "Restricted",
+    "district": "",
+    "recipients": "",
+    "code": 0.0,
+    "note": "MTA null",
+    "references": ""
+  },
+  "body": {
+    "incidentOriginator": "SMA",
+    "data": {
+      "Bridge_658": {
+        "id": "Bridge_658",
+        "label": "Bridge",
+        "type": [
+          "Bridge"
+        ],
+        "refs": [],
+        "participants": [],
+        "location": null,
+        "seeAlso": null,
+        "number": 0
+      },
+      "Water_653": {
+        "id": "Water_653",
+        "label": "Water",
+        "type": [
+          "Flood"
+        ],
+        "refs": [
+          "bn:00042379n"
+        ],
+        "participants": [
+          {
+            "role": "root",
+            "participant": "embankment_656"
+          },
+          {
+            "role": "AM",
+            "participant": "Bridge_658"
+          }
+        ],
+        "location": null,
+        "seeAlso": null,
+        "number": 0
+      },
+      "embankment_656": {
+        "id": "embankment_656",
+        "label": "embankment",
+        "type": [
+          "Embankment"
+        ],
+        "refs": [
+          "bn:00030464n"
+        ],
+        "participants": [],
+        "location": null,
+        "seeAlso": null,
+        "number": 0
+      }
+    },
+    "language": "en-US",
+    "incidentID": "flood_test_id1",
+    "startTimeUTC": "2018-06-19T07:20:00Z"
+  }
+}
