@@ -87,6 +87,8 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 			Optional<String> geolocationUrl = Optional.ofNullable(System.getenv("GEOLOCATION_URL"));
 			Optional<String> nerEnUrl = Optional.ofNullable(System.getenv("NER_EN_URL"));
 			Optional<String> nerEsUrl = Optional.ofNullable(System.getenv("NER_ES_URL"));
+			Optional<String> nerElUrl = Optional.ofNullable(System.getenv("NER_ES_URL")); //TODO: add EL NER
+			Optional<String> nerItUrl = Optional.ofNullable(System.getenv("NER_ES_URL")); //TODO: add IT NER
 
 			this.pipes = new HashMap<>();
 			
@@ -105,12 +107,12 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 			AnalysisConfigurationEL elConf = new AnalysisConfigurationEL();
 			elConf.setBabelnetConfigPath(babelnetConfigPath.get());
 			elConf.setGeolocationUrl(geolocationUrl.get());
-			elConf.setNerUrl(nerEsUrl.get());
+			elConf.setNerUrl(nerElUrl.get());
 			
 			AnalysisConfigurationIT itConf = new AnalysisConfigurationIT();
 			itConf.setBabelnetConfigPath(babelnetConfigPath.get());
 			itConf.setGeolocationUrl(geolocationUrl.get());
-			itConf.setNerUrl(nerEsUrl.get());
+			itConf.setNerUrl(nerItUrl.get());
 			
 			/*Map<String, String> options = new HashMap<String, String>();
 			options.put("babelnet", "/babelnet_config");

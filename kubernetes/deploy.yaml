@@ -19,10 +19,18 @@ spec:
     spec:
       containers:
       - env:
+        - name: BABELNET_CONFIG
+          value: /babelnet_config
         - name: CONCEPT_URL
           value: http://concept-candidates:8000
+        - name: CONCEPT_ES_URL
+          value: http://concept-candidates-es:8000
         - name: GEOLOCATION_URL
           value: http://geolocation:8000
+        - name: NER_EN_URL
+          value: http://ner-spacy-en:8000
+        - name: NER_ES_URL
+          value: http://ner-spacy-es:8000
         - name: SECRET_MH_API_KEY
           valueFrom:
            secretKeyRef:
@@ -38,7 +46,7 @@ spec:
            secretKeyRef:
             name: mongo-secret
             key: uri
-        image: maven-taln.upf.edu/beaware/text-analysis-all:20190625
+        image: maven-taln.upf.edu/beaware/text-analysis-all:20190703
         name: text-analysis-all
         resources:
           limits:
