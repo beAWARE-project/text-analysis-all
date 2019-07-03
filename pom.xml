@@ -96,6 +96,11 @@
 				<artifactId>lucene-highlighter</artifactId>
 				<version>${lucene.version}</version>
 			</dependency>
+			<dependency>
+			    <groupId>net.sourceforge.mstparser</groupId>
+			    <artifactId>mstparser</artifactId>
+			    <version>0.6.0-TALN</version>
+		    </dependency>
 		</dependencies>
 	</dependencyManagement>
 
