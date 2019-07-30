@@ -11,6 +11,7 @@ import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.jcas.JCas;
 import org.junit.Test;
 
+import de.tudarmstadt.ukp.dkpro.core.io.xmi.XmiWriter;
 import edu.upf.taln.beaware.kafka.KafkaReader;
 
 public class KafkaTest {
@@ -27,6 +28,11 @@ public class KafkaTest {
 				TextAnalysisRouter.PARAM_KAFKAKEY, "",
 				TextAnalysisRouter.TARGET_VIEW, ""*/
 				); 
+		AnalysisEngine writer = AnalysisEngineFactory.createEngine(
+				XmiWriter.class,
+				XmiWriter.PARAM_OVERWRITE, true,
+				XmiWriter.PARAM_TARGET_LOCATION, "src/test/resources/output/xmi/");
 		ae.process(jCas);
+		writer.process(jCas);
 	}
 }

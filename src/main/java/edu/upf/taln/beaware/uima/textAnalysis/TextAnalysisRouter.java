@@ -87,8 +87,10 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 			Optional<String> geolocationUrl = Optional.ofNullable(System.getenv("GEOLOCATION_URL"));
 			Optional<String> nerEnUrl = Optional.ofNullable(System.getenv("NER_EN_URL"));
 			Optional<String> nerEsUrl = Optional.ofNullable(System.getenv("NER_ES_URL"));
-			Optional<String> nerElUrl = Optional.ofNullable(System.getenv("NER_ES_URL")); //TODO: add EL NER
+			Optional<String> nerElUrl = Optional.ofNullable(System.getenv("NER_EN_URL")); //TODO: add EL NER
 			Optional<String> nerItUrl = Optional.ofNullable(System.getenv("NER_ES_URL")); //TODO: add IT NER
+			Optional<String> compactDictionaryEn = Optional.ofNullable(System.getenv("COMPACT_DICTIONARY_EN"));
+			Optional<String> disambiguationPropertiesEn = Optional.ofNullable(System.getenv("DISAMBIGUATION_PROPS_EN"));
 
 			this.pipes = new HashMap<>();
 			
@@ -97,6 +99,8 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 			enConf.setGeolocationUrl(geolocationUrl.get());
 			enConf.setNerUrl(nerEnUrl.get());
 			enConf.setCandidateConceptsUrl(conceptEnUrl.get());
+			enConf.setCompactDictionary(compactDictionaryEn.get());
+			enConf.setDisambiguationProperties(disambiguationPropertiesEn.get());
 			
 			AnalysisConfigurationES esConf = new AnalysisConfigurationES();
 			esConf.setBabelnetConfigPath(babelnetConfigPath.get());
