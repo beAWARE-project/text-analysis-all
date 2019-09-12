@@ -15,7 +15,8 @@
 		<dkpro.version>1.9.1</dkpro.version>
 		<dkpro.taln.version>1.9.1-taln</dkpro.taln.version>
 		<beaware.pipeline.version>2.1.0-SNAPSHOT</beaware.pipeline.version>
-		<lucene.version>4.10.4</lucene.version> <!-- newer versions are incompatible with Babelnet -->
+		<!--  For BN3: use lucene.version 4.10.4 newer versions are incompatible with Babelnet 3-->
+		<lucene.version>8.2.0</lucene.version>
 	</properties>
 
 	<repositories>
