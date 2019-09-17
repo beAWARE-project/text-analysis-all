@@ -40,6 +40,7 @@ import edu.upf.taln.beaware.analysis.pojos.AnalysisConfigurationEL;
 import edu.upf.taln.beaware.analysis.pojos.AnalysisConfigurationEN;
 import edu.upf.taln.beaware.analysis.pojos.AnalysisConfigurationES;
 import edu.upf.taln.beaware.analysis.pojos.AnalysisConfigurationIT;
+import edu.upf.taln.beaware.commons.BeawareException;
 import edu.upf.taln.beaware.kafka.AnalysisKafkaConsumer;
 import edu.upf.taln.beaware.kafka.types.BeAwareMetaData;
 import edu.upf.taln.uima.clean.twitter_clean.CleanTokens;
@@ -91,33 +92,33 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 			Optional<String> nerItUrl = Optional.ofNullable(System.getenv("NER_ES_URL")); //TODO: add IT NER
 
 			this.pipes = new HashMap<>();
-			
+
 			AnalysisConfigurationEN enConf = new AnalysisConfigurationEN();
 			enConf.setBabelnetConfigPath(babelnetConfigPath.get());
 			enConf.setGeolocationUrl(geolocationUrl.get());
 			enConf.setNerUrl(nerEnUrl.get());
 			enConf.setCandidateConceptsUrl(conceptEnUrl.get());
-			
+
 			AnalysisConfigurationES esConf = new AnalysisConfigurationES();
 			esConf.setBabelnetConfigPath(babelnetConfigPath.get());
 			esConf.setGeolocationUrl(geolocationUrl.get());
 			esConf.setNerUrl(nerEsUrl.get());
 			esConf.setCandidateConceptsUrl(conceptEsUrl.get());
-			
+
 			AnalysisConfigurationEL elConf = new AnalysisConfigurationEL();
 			elConf.setBabelnetConfigPath(babelnetConfigPath.get());
 			elConf.setGeolocationUrl(geolocationUrl.get());
 			elConf.setNerUrl(nerElUrl.get());
-			
+
 			AnalysisConfigurationIT itConf = new AnalysisConfigurationIT();
 			itConf.setBabelnetConfigPath(babelnetConfigPath.get());
 			itConf.setGeolocationUrl(geolocationUrl.get());
 			itConf.setNerUrl(nerItUrl.get());
-			
+
 			/*Map<String, String> options = new HashMap<String, String>();
 			options.put("babelnet", "/babelnet_config");
 			options.put("similFile", "/resources/sensembed-vectors-merged_bin");*/
-			
+
 			this.pipes.put("en", createEngine(EnglishPipelineUD.getPipelineDescription(enConf)));
 			this.pipes.put("es", createEngine(SpanishPipelineUD.getPipelineDescription(esConf)));
 			this.pipes.put("it", createEngine(ItalianPipelineUD.getPipelineDescription(itConf)));
@@ -153,7 +154,7 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 		initializePipelines();
 	}
 
-	public JCas runPipeline(JCas jcas) throws AnalysisEngineProcessException {
+	public JCas runPipeline(JCas jcas) throws AnalysisEngineProcessException, BeawareException {
 		// treat tweets differently
 		boolean isTwitter = false;
 		/*
@@ -165,8 +166,8 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 		// process with appropriate pipeline
 		String lang = jcas.getDocumentLanguage();
 		if (!pipes.containsKey(lang)) {
-			logger.info("unknown language: "+lang);
-			return null; // skip unknown languages
+			logger.info("unsupported language: "+lang);
+			throw new BeawareException("unsupported language: "+lang); // skip unknown languages
 		}
 		if (isTwitter) {
 			try {
@@ -190,17 +191,16 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 
 	@Override
 	public void process(JCas kafkaCas) throws AnalysisEngineProcessException {
-
-		String kafkaMessage = BeAwareMetaData.get(kafkaCas).getKafkaMessage();
-		String topic = "unknown"; 
 		try {
+			String kafkaMessage = BeAwareMetaData.get(kafkaCas).getKafkaMessage();
+			String topic = "unknown"; 
 			logger.info("received message: " + kafkaMessage);
 
 			String filterBody = "$[?(@.body)]";
 			List<String> matchesBody = JsonPath.read(kafkaMessage, filterBody);
 			if (matchesBody.isEmpty()) {
-				logger.info("no body found, rejected: " + kafkaMessage);
-				return;
+				//logger.info("no body found, rejected: " + kafkaMessage);
+				throw new BeawareException("no body found, rejected: " + kafkaMessage);
 			}
 
 			try {
@@ -216,23 +216,19 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 				String filterApp = "$[?(@.body.description && @.header.actionType == 'Alert' && (@.header.sender == 'SCAPP' ||  @.header.sender == 'FRAPP'))]";
 				List<String> matches = JsonPath.read(kafkaMessage, filterApp);
 				if (matches.isEmpty()) {
-					logger.info("rejected by filter: " + kafkaMessage);
-					return;
+					//logger.info("rejected by filter: " + kafkaMessage);
+					throw new BeawareException("rejected by filter: " + kafkaMessage);
 				}
 			}
-
-			// build CAS for processing (like BeAwareKafkaIncidentReader)
-			//JCas jcas = messageToCas(kafkaMessage);
-
 			JCas resultCas = runPipeline(kafkaCas);
-			/*String resultJson = AnalysisKafkaConsumer.extractJson(resultCas, "TOP028_TEXT_ANALYSED");
-			System.out.println(resultJson);*/
 			this.kafkaWriter.process(resultCas);
-
+		} catch (BeawareException e) {
+			logger.severe("BeawareException: "+e.getMessage());
+			logger.severe("skipping message");
 		} catch (Exception e) {
-			logger.severe("skipping message:" + kafkaMessage);
+			logger.severe("unexpected error, skipping message:");
 			logger.severe(Throwables.getStackTraceAsString(e));
-			throw new AnalysisEngineProcessException(e);
+			//throw new AnalysisEngineProcessException(e);
 		}
 	}
 
