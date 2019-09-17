@@ -226,7 +226,7 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 			logger.severe("BeawareException: "+e.getMessage());
 			logger.severe("skipping message");
 		} catch (Exception e) {
-			logger.severe("unexpected error, skipping message:");
+			logger.severe("unexpected error, skipping message: "+e.getMessage());
 			logger.severe(Throwables.getStackTraceAsString(e));
 			//throw new AnalysisEngineProcessException(e);
 		}
