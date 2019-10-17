@@ -10,12 +10,12 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jdk.version>1.8</jdk.version>
+		<jdk.version>9</jdk.version>
 		<mvn.compiler.version>3.5.1</mvn.compiler.version>
 		<dkpro.version>1.9.1</dkpro.version>
 		<dkpro.taln.version>1.9.1-taln</dkpro.taln.version>
 		<beaware.pipeline.version>2.1.0-SNAPSHOT</beaware.pipeline.version>
-		<lucene.version>4.10.4</lucene.version> <!-- newer versions are incompatible with Babelnet -->
+		<lucene.version>7.2.0</lucene.version> <!-- newer versions are incompatible with Babelnet -->
 	</properties>
 
 	<repositories>
@@ -100,6 +100,12 @@
 			    <groupId>net.sourceforge.mstparser</groupId>
 			    <artifactId>mstparser</artifactId>
 			    <version>0.6.0-TALN</version>
+		    </dependency>
+		    
+		    <dependency>
+			    <groupId>edu.upf.taln.beaware</groupId>
+			    <artifactId>beaware-types</artifactId>
+			    <version>2.1.0-SNAPSHOT</version>
 		    </dependency>
 		</dependencies>
 	</dependencyManagement>
