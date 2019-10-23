@@ -18,10 +18,10 @@
    },
    "body": {
       "incidentOriginator": "SMA",
-      "incidentID": "INC_SMA_1146370711667298305",
-      "language": "es-ES",
+      "incidentID": "INC_SMA_1146370711667298304",
+      "language": "en-US",
       "startTimeUTC": "2019-07-03T10:50:56Z",
-      "description": "Desde el observatorio de aves El Saler podemos ver un incendio que se dirige hacia el norte. Por favor, vaya a Valencia y apague.",
+      "description": "From the El Saler bird observatory we can see a fire heading north. Please go to Valencia and put it out.",
       "position": {
          "latitude": 39.382862,
          "longitude": -0.329648

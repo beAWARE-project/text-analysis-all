@@ -56,6 +56,13 @@
 				<artifactId>jackson-annotations</artifactId>
 				<version>2.9.8</version>
 			</dependency>
+			
+			<dependency>
+		      <groupId>commons-io</groupId>
+		      <artifactId>commons-io</artifactId>
+		      <version>2.6</version>
+		    </dependency>
+			
 			<dependency>
 				<groupId>xerces</groupId>
 				<artifactId>xercesImpl</artifactId>
@@ -105,7 +112,7 @@
 		    <dependency>
 			    <groupId>edu.upf.taln.beaware</groupId>
 			    <artifactId>beaware-types</artifactId>
-			    <version>2.1.0-SNAPSHOT</version>
+			    <version>${beaware.pipeline.version}</version>
 		    </dependency>
 		</dependencies>
 	</dependencyManagement>
