@@ -21,7 +21,7 @@ spec:
       - env:
         - name: BABELNET_CONFIG
           value: /babelnet_config
-        - name: CONCEPT_URL
+        - name: CONCEPT_EN_URL
           value: http://concept-candidates:8000
         - name: CONCEPT_ES_URL
           value: http://concept-candidates-es:8000
@@ -31,6 +31,16 @@ spec:
           value: http://ner-spacy-en:8000
         - name: NER_ES_URL
           value: http://ner-spacy-es:8000
+        - name: DISAMBIGUATION_PROPS_EN
+          value: /app/disambiguation_en.properties
+        - name: DISAMBIGUATION_PROPS_ES
+          value: /app/disambiguation_es.properties
+        - name: COMPACT_DICTIONARY_EN
+          value: /resources/BabelNet-4.0.1_en.cache
+        - name: COMPACT_DICTIONARY_ES
+          value: /resources/BabelNet-4.0.1_es.cache
+        - name: SYNSETS_FILE
+          value: /resources/synsets_3rd_pilot.bin
         - name: SECRET_MH_API_KEY
           valueFrom:
            secretKeyRef:
@@ -46,7 +56,7 @@ spec:
            secretKeyRef:
             name: mongo-secret
             key: uri
-        image: maven-taln.upf.edu/beaware/text-analysis-all:20190917.2
+        image: maven-taln.upf.edu/beaware/text-analysis-all:20191029
         name: text-analysis-all
         resources:
           limits:
