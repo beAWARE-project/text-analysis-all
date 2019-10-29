@@ -18,7 +18,7 @@
 		<!-- For BN3 (newer versions are incompatible with Babelnet 3) -->
 		<!-- <lucene.version>4.10.4</lucene.version> -->
 		<!-- For BN4 -->
-		<lucene.version>8.2.0</lucene.version>
+		<lucene.version>7.2.0</lucene.version>
 	</properties>
 
 	<repositories>
