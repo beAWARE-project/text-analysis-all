@@ -20,7 +20,7 @@ spec:
       containers:
       - env:
         - name: BABELNET_CONFIG
-          value: /babelnet_config
+          value: /app/babelnet_config
         - name: CONCEPT_EN_URL
           value: http://concept-candidates:8000
         - name: CONCEPT_ES_URL
