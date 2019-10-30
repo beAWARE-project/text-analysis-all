@@ -64,7 +64,7 @@ spec:
             memory: "15Gi"
           requests:
             cpu: "200m"
-            memory: "10Gi"
+            memory: "9Gi"
         volumeMounts:
         - mountPath: /resources/
           name: text-analysis-all-claim
