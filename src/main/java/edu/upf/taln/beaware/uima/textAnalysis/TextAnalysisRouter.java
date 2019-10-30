@@ -133,8 +133,8 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 
 			this.pipes.put("en", createEngine(EnglishPipelineUD.getPipelineDescription(enConf)));
 			this.pipes.put("es", createEngine(SpanishPipelineUD.getPipelineDescription(esConf)));
-			this.pipes.put("it", createEngine(ItalianPipelineUD.getPipelineDescription(itConf)));
-			this.pipes.put("el", createEngine(GreekPipelineUD.getPipelineDescription(elConf)));
+			//this.pipes.put("it", createEngine(ItalianPipelineUD.getPipelineDescription(itConf)));
+			//this.pipes.put("el", createEngine(GreekPipelineUD.getPipelineDescription(elConf)));
 
 			AggregateBuilder builder = new AggregateBuilder();
 
