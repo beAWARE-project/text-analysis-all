@@ -1,39 +1,7 @@
 version: '3.2'
 services:
-  geolocation:
-    image: maven-taln.upf.edu/uima_taln_geolocation:20190125b
-    ports:
-      - "8001:8000"
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: "1"
-          memory: 8GB
-    volumes:
-      - type: bind
-        source: "/resources/geolocation/indices/"
-        target: "/app/indices"
-        read_only: true
-  concept_candidates:
-    image: maven-taln.upf.edu/uima_taln_concept:20190130b
-    ports:
-      - "8002:8000"
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: "1"
-          memory: 4GB
-    volumes:
-      - type: bind
-        source: "/resources/concept_extractor/indices/"
-        target: "/app/indices"
-        read_only: true
-    environment:
-      - LANGUAGE=en
   text-analysis-all:
-    image: maven-taln.upf.edu/beaware/text-analysis-all:20190220
+    image: maven-taln.upf.edu/beaware/text-analysis-all:20191029
     deploy:
       replicas: 1
       resources:
@@ -42,13 +10,21 @@ services:
           memory: 10GB
     volumes:
       - type: bind
-        source: "/resources/BabelNet-3.7"
-        target: "/resources/BabelNet-3.7"
-        read_only: true
-      - type: bind
-        source: "/resources/sensembed-vectors-merged_bin"
-        target: "/resources/sensembed-vectors-merged_bin"
+        source: $RESOURCES
+        target: "/resources/"
         read_only: true
     environment:
-      - CONCEPT_URL=http://concept_candidates:8000
-      - GEOLOCATION_URL=http://geolocation:8000
+      - BABELNET_CONFIG=/app/babelnet_config
+      - CONCEPT_EN_URL=http://concepts-en.v.taln.ml
+      - CONCEPT_ES_URL=http://concepts-es.v.taln.ml
+      - GEOLOCATION_URL=http://geolocation.v.taln.ml
+      - DISAMBIGUATION_PROPS_EN=/app/disambiguation_en.properties
+      - DISAMBIGUATION_PROPS_ES=/app/disambiguation_es.properties
+      - COMPACT_DICTIONARY_EN=/resources/BabelNet-4.0.1_en.cache
+      - COMPACT_DICTIONARY_ES=/resources/BabelNet-4.0.1_es.cache
+      - NER_EN_URL=http://ner_spacy_en.v.taln.ml
+      - NER_ES_URL=http://ner_spacy_es.v.taln.ml
+      - SYNSETS_FILE=/resources/synsets_3rd_pilot.bin
+      - SECRET_MH_API_KEY=xxx
+      - SECRET_MH_BROKERS=xxx
+      - KAFKA_GROUPID=text-analysis-all-debug-docker
