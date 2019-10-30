@@ -63,6 +63,14 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 			description="Kafka API key")
 	private String kafkaApiKey;
 
+    /**
+     * Kafka Group Id
+     */
+    public static final String PARAM_GROUPID = "KafkaGroupId";
+    @ConfigurationParameter(name = PARAM_GROUPID, mandatory = false, defaultValue = "test_group",
+            description = "Kafka Group Id")
+    private String groupId;
+
 	private Map<String, AnalysisEngine> pipes;
 
 	private AnalysisEngine cleaner;
@@ -152,7 +160,8 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 		this.kafkaWriter = createEngine(createEngineDescription(AnalysisKafkaConsumer.class,
 				AnalysisKafkaConsumer.PARAM_KAFKATOPIC,"TOP028_TEXT_ANALYSED",
 				AnalysisKafkaConsumer.PARAM_KAFKABROKERS, kafkaBrokers,
-				AnalysisKafkaConsumer.PARAM_KAFKAKEY, kafkaApiKey
+				AnalysisKafkaConsumer.PARAM_KAFKAKEY, kafkaApiKey,
+				AnalysisKafkaConsumer.PARAM_GROUPID, groupId
 				));
 
 		initializePipelines();
