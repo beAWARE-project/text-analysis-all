@@ -19,17 +19,13 @@ import org.apache.uima.fit.component.JCasAnnotator_ImplBase;
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
 import org.apache.uima.fit.factory.AggregateBuilder;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
-import org.apache.uima.fit.factory.JCasFactory;
-import org.apache.uima.fit.internal.MetaDataUtil;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 
 import com.google.common.base.Throwables;
-import com.google.gson.GsonBuilder;
 import com.jayway.jsonpath.JsonPath;
 
-import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
 import de.tudarmstadt.ukp.dkpro.core.arktools.ArktweetTokenizer;
 import de.tudarmstadt.ukp.dkpro.core.castransformation.ApplyChangesAnnotator;
 import edu.upf.taln.beaware.analysis.EnglishPipelineUD;
@@ -67,6 +63,14 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 			description="Kafka API key")
 	private String kafkaApiKey;
 
+    /**
+     * Kafka Group Id
+     */
+    public static final String PARAM_GROUPID = "KafkaGroupId";
+    @ConfigurationParameter(name = PARAM_GROUPID, mandatory = false, defaultValue = "test_group",
+            description = "Kafka Group Id")
+    private String groupId;
+
 	private Map<String, AnalysisEngine> pipes;
 
 	private AnalysisEngine cleaner;
@@ -83,9 +87,13 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 			builders.put("it", new ItalianPipelineUD());*/
 
 			Optional<String> babelnetConfigPath = Optional.ofNullable(System.getenv("BABELNET_CONFIG"));
-			Optional<String> conceptEnUrl = Optional.ofNullable(System.getenv("CONCEPT_URL"));
+			Optional<String> conceptEnUrl = Optional.ofNullable(System.getenv("CONCEPT_EN_URL"));
 			Optional<String> conceptEsUrl = Optional.ofNullable(System.getenv("CONCEPT_ES_URL"));
 			Optional<String> geolocationUrl = Optional.ofNullable(System.getenv("GEOLOCATION_URL"));
+			Optional<String> rankingPropsEnUrl = Optional.ofNullable(System.getenv("DISAMBIGUATION_PROPS_EN"));
+			Optional<String> rankingPropsEsUrl = Optional.ofNullable(System.getenv("DISAMBIGUATION_PROPS_ES"));
+			Optional<String> compactDictionaryEn = Optional.ofNullable(System.getenv("COMPACT_DICTIONARY_EN"));
+			Optional<String> compactDictionaryEs = Optional.ofNullable(System.getenv("COMPACT_DICTIONARY_ES"));
 			Optional<String> nerEnUrl = Optional.ofNullable(System.getenv("NER_EN_URL"));
 			Optional<String> nerEsUrl = Optional.ofNullable(System.getenv("NER_ES_URL"));
 			Optional<String> nerElUrl = Optional.ofNullable(System.getenv("NER_ES_URL")); //TODO: add EL NER
@@ -98,13 +106,17 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 			enConf.setGeolocationUrl(geolocationUrl.get());
 			enConf.setNerUrl(nerEnUrl.get());
 			enConf.setCandidateConceptsUrl(conceptEnUrl.get());
-
+			enConf.setRankingPropertiesFile(rankingPropsEnUrl.get());
+			enConf.setCompactDictionaryPath(compactDictionaryEn.get());
+			
 			AnalysisConfigurationES esConf = new AnalysisConfigurationES();
 			esConf.setBabelnetConfigPath(babelnetConfigPath.get());
 			esConf.setGeolocationUrl(geolocationUrl.get());
 			esConf.setNerUrl(nerEsUrl.get());
 			esConf.setCandidateConceptsUrl(conceptEsUrl.get());
-
+			esConf.setRankingPropertiesFile(rankingPropsEsUrl.get());
+			esConf.setCompactDictionaryPath(compactDictionaryEs.get());
+			
 			AnalysisConfigurationEL elConf = new AnalysisConfigurationEL();
 			elConf.setBabelnetConfigPath(babelnetConfigPath.get());
 			elConf.setGeolocationUrl(geolocationUrl.get());
@@ -148,7 +160,8 @@ public class TextAnalysisRouter extends JCasAnnotator_ImplBase{
 		this.kafkaWriter = createEngine(createEngineDescription(AnalysisKafkaConsumer.class,
 				AnalysisKafkaConsumer.PARAM_KAFKATOPIC,"TOP028_TEXT_ANALYSED",
 				AnalysisKafkaConsumer.PARAM_KAFKABROKERS, kafkaBrokers,
-				AnalysisKafkaConsumer.PARAM_KAFKAKEY, kafkaApiKey
+				AnalysisKafkaConsumer.PARAM_KAFKAKEY, kafkaApiKey,
+				AnalysisKafkaConsumer.PARAM_GROUPID, groupId
 				));
 
 		initializePipelines();

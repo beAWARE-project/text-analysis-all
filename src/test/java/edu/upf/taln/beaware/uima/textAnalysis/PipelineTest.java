@@ -1,7 +1,6 @@
 package edu.upf.taln.beaware.uima.textAnalysis;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -12,15 +11,14 @@ import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.apache.uima.fit.pipeline.SimplePipeline;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
-import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.tudarmstadt.ukp.dkpro.core.io.text.TextReader;
-import edu.upf.taln.beaware.analysis.extractor.EntityExtractor;
-import edu.upf.taln.beaware.analysis.extractor.RelationExtractor;
-import edu.upf.taln.beaware.commons.extractor.Entity;
+import edu.upf.taln.beaware.analysis.EntityExtractor;
+import edu.upf.taln.beaware.analysis.RelationExtractor;
+import edu.upf.taln.beaware.commons.analysis.pojos.Entity;
 
 public class PipelineTest {
 	

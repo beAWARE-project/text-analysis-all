@@ -1,0 +1,30 @@
+{
+   "header": {
+      "topicName": "TOP001_SOCIAL_MEDIA_TEXT",
+      "topicMajorVersion": 0,
+      "topicMinorVersion": 1,
+      "sender": "SMA",
+      "msgIdentifier": "sma-msg-1562151056427",
+      "sentUTC": "2019-07-03T10:50:56Z",
+      "status": "Actual",
+      "actionType": "Alert",
+      "specificSender": "citizen",
+      "scope": "Restricted",
+      "district": "Valencia",
+      "recipients": "",
+      "code": 0,
+      "note": "",
+      "references": ""
+   },
+   "body": {
+      "incidentOriginator": "SMA",
+      "incidentID": "INC_SMA_1146370711667298305",
+      "language": "es-ES",
+      "startTimeUTC": "2019-07-03T10:50:56Z",
+      "description": "Desde el observatorio de aves El Saler podemos ver un incendio que se dirige hacia el norte. Por favor, vaya a Valencia y apague.",
+      "position": {
+         "latitude": 39.382862,
+         "longitude": -0.329648
+      }
+   }
+}
