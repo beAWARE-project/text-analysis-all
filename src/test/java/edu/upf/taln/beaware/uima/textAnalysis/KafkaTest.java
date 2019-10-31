@@ -21,7 +21,7 @@ public class KafkaTest {
 		JCas jCas = JCasFactory.createJCas();
 		String inputFilePath = "src/test/resources/input/kafka/example_top002.json";
 		String jsonString = FileUtils.readFileToString(new File(inputFilePath), "UTF8");
-		BeawareCasUtils.initializeCAS(jCas.getCas(), jsonString);
+		BeawareCasUtils.initializeAnalysisCAS(jCas.getCas(), jsonString);
 		AnalysisEngine ae = AnalysisEngineFactory.createEngine(
 				TextAnalysisRouter.class,
 				TextAnalysisRouter.PARAM_KAFKABROKERS, ""/*,
@@ -42,7 +42,7 @@ public class KafkaTest {
 		JCas jCas = JCasFactory.createJCas();
 		String inputFilePath = "src/test/resources/input/kafka/example_top001.json";
 		String jsonString = FileUtils.readFileToString(new File(inputFilePath), "UTF8");
-		BeawareCasUtils.initializeCAS(jCas.getCas(), jsonString);
+		BeawareCasUtils.initializeAnalysisCAS(jCas.getCas(), jsonString);
 		AnalysisEngine ae = AnalysisEngineFactory.createEngine(
 				TextAnalysisRouter.class,
 				TextAnalysisRouter.PARAM_KAFKABROKERS, ""/*,
